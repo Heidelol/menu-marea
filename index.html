@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menú digital para restaurantes — sin comisiones</title>
+<meta name="description" content="Convierte tu menú en una experiencia digital que recibe pedidos directamente por WhatsApp, refleja la identidad de tu restaurante y se actualiza en minutos.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e3d3e'/%3E%3Cpath d='M8 20c2-4 2-8 0-12M16 20c2-4 2-8 0-12M24 20c2-4 2-8 0-12' stroke='%23f7f2e7' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root{
+    --cream:#f7f2e6;
+    --cream-2:#efe4cf;
+    --ink:#221f1b;
+    --ink-soft:#55504a;
+    --ink-faint:#8a8377;
+    --petrol:#0e3d3e;
+    --petrol-dark:#092b2b;
+    --petrol-tint:#e2ebe8;
+    --terracota:#c1552f;
+    --terracota-dark:#9c4324;
+    --line:rgba(34,31,27,.14);
+    --line-soft:rgba(34,31,27,.08);
+    --card:#fffdf8;
+    --shadow-sm:0 1px 2px rgba(34,31,27,.06);
+    --shadow-md:0 20px 44px -22px rgba(34,31,27,.35);
+    --radius-lg:20px;
+    --radius-md:14px;
+    color-scheme: light;
+  }
+  /* Un solo mundo visual, editorial y cálido — deliberadamente sin modo oscuro. */
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{display:block; max-width:100%;}
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding-inline:20px;}
+  @media (min-width:640px){ .wrap{padding-inline:32px;} }
+
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; margin:0; color:var(--ink);}
+  .eyebrow{
+    font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--terracota-dark); font-weight:700;
+    display:flex; align-items:center; gap:8px;
+  }
+  .eyebrow::before{content:"";width:16px;height:1px;background:var(--terracota);display:inline-block;}
+
+  section{padding-block:64px;}
+  @media (min-width:900px){ section{padding-block:96px;} }
+  .section-head{max-width:640px; margin-bottom:40px;}
+  .section-head h2{font-size:clamp(1.7rem, 3.4vw, 2.3rem); line-height:1.15; margin-top:8px;}
+  .section-head p{color:var(--ink-soft); font-size:15.5px; line-height:1.6; margin-top:12px;}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-family:'Inter', sans-serif; font-weight:700; font-size:14.5px;
+    padding:13px 22px; border-radius:999px; text-decoration:none;
+    cursor:pointer; border:1px solid transparent; line-height:1;
+    transition:background .15s ease, color .15s ease, border-color .15s ease, transform .05s ease;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn:focus-visible{outline:3px solid var(--terracota); outline-offset:2px;}
+  .btn-primary{background:var(--petrol); color:var(--cream); border-color:var(--petrol);}
+  .btn-primary:hover{background:var(--petrol-dark); border-color:var(--petrol-dark);}
+  .btn-secondary{background:transparent; color:var(--petrol); border-color:var(--petrol);}
+  .btn-secondary:hover{background:var(--petrol-tint);}
+  .btn-block{width:100%;}
+
+  /* ---------- Nav ---------- */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--cream) 90%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .nav-row{display:flex; align-items:center; justify-content:space-between; padding-block:14px;}
+  .wordmark{
+    display:flex; align-items:baseline; gap:2px; text-decoration:none;
+    font-family:'Fraunces', serif; font-weight:600; font-size:19px; color:var(--ink);
+  }
+  .wordmark .dot{color:var(--terracota); font-size:22px; line-height:0;}
+  .nav-links{display:none; align-items:center; gap:28px; font-size:14px; font-weight:600;}
+  .nav-links a{text-decoration:none; color:var(--ink-soft); transition:color .15s;}
+  .nav-links a:hover{color:var(--petrol);}
+  .nav-links a:focus-visible{outline:2px solid var(--terracota); outline-offset:4px; border-radius:3px;}
+  @media (min-width:860px){ .nav-links{display:flex;} }
+  .nav-cta{display:none;}
+  @media (min-width:640px){ .nav-cta{display:inline-flex;} }
+
+  /* ---------- Hero ---------- */
+  .hero{padding-block: 40px 56px;}
+  @media (min-width:900px){ .hero{padding-block:64px 80px;} }
+  .hero-grid{display:grid; gap:40px; align-items:center;}
+  @media (min-width:940px){ .hero-grid{grid-template-columns:1.05fr .95fr; gap:56px;} }
+  .hero h1{font-size:clamp(2.1rem, 6vw, 3.3rem); line-height:1.06; letter-spacing:-.01em; margin-top:12px;}
+  .hero-desc{color:var(--ink-soft); font-size:16.5px; line-height:1.6; max-width:46ch; margin-top:16px;}
+  .hero-ctas{display:flex; flex-wrap:wrap; gap:12px; margin-top:26px;}
+  .indicators{display:flex; flex-wrap:wrap; gap:10px; margin-top:28px;}
+  .indicator{
+    display:flex; align-items:center; gap:7px;
+    font-size:12.5px; font-weight:600; color:var(--ink-soft);
+    background:var(--card); border:1px solid var(--line);
+    padding:7px 13px; border-radius:999px;
+  }
+  .indicator .dot{width:6px;height:6px;border-radius:50%;background:var(--terracota); flex:none;}
+
+  /* Phone mockup */
+  .phone-wrap{display:flex; flex-direction:column; align-items:center; gap:14px;}
+  .phone-frame{
+    width:min(74vw, 300px); aspect-ratio:9/19.4;
+    background:#171512; border-radius:40px; padding:11px;
+    box-shadow:var(--shadow-md);
+    position:relative;
+  }
+  .phone-frame::before{
+    content:""; position:absolute; top:11px; left:50%; transform:translateX(-50%);
+    width:74px; height:20px; background:#171512; border-radius:0 0 14px 14px; z-index:2;
+  }
+  .phone-screen{
+    width:100%; height:100%; border-radius:29px; overflow:hidden;
+    background:#0e0c09; position:relative;
+  }
+  .phone-screen iframe{width:100%; height:100%; border:0; display:block;}
+  .phone-caption{font-size:11.5px; color:var(--ink-faint); text-align:center; max-width:220px;}
+
+  /* ---------- Problema / Solución ---------- */
+  .compare{
+    display:grid; gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden;
+  }
+  @media (min-width:760px){ .compare{grid-template-columns:1fr 1fr;} }
+  .compare-col{background:var(--card); padding:30px 26px;}
+  .compare-col.solution{background:var(--petrol); color:var(--cream);}
+  .compare-label{
+    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    font-weight:700; margin-bottom:16px; display:block; color:var(--terracota-dark);
+  }
+  .compare-col.solution .compare-label{color:#e9c876;}
+  .compare-col h3{font-size:1.2rem; margin-bottom:14px;}
+  .compare-col ul{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px;}
+  .compare-col li{font-size:14.5px; line-height:1.55; padding-left:20px; position:relative; color:var(--ink-soft);}
+  .compare-col li::before{content:"–"; position:absolute; left:0; color:var(--ink-faint);}
+  .compare-col.solution li{color:rgba(247,242,230,.88);}
+  .compare-col.solution li::before{content:"✓"; color:#e9c876;}
+
+  /* ---------- Beneficios ---------- */
+  .benefits-grid{display:grid; gap:28px 24px; grid-template-columns:1fr;}
+  @media (min-width:640px){ .benefits-grid{grid-template-columns:1fr 1fr;} }
+  @media (min-width:1000px){ .benefits-grid{grid-template-columns:repeat(3,1fr);} }
+  .benefit{padding-top:4px; border-top:1px solid var(--line);}
+  .benefit-num{
+    font-family:'Fraunces', serif; font-weight:600; font-size:13px; color:var(--terracota);
+    margin-bottom:10px; display:block;
+  }
+  .benefit h3{font-size:1.05rem; margin-bottom:8px; line-height:1.3;}
+  .benefit p{font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:0;}
+
+  /* ---------- Cómo funciona ---------- */
+  .steps{display:grid; gap:28px; grid-template-columns:1fr;}
+  @media (min-width:760px){ .steps{grid-template-columns:repeat(3,1fr); gap:24px;} }
+  .step{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg);
+    padding:28px 24px; position:relative;
+  }
+  .step-num{
+    font-family:'Fraunces', serif; font-weight:600; font-size:2rem; color:var(--petrol);
+    line-height:1; margin-bottom:16px;
+  }
+  .step h3{font-size:1.05rem; margin-bottom:8px;}
+  .step p{font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:0;}
+
+  /* ---------- Personalización ---------- */
+  .personalize-grid{display:grid; gap:22px; grid-template-columns:1fr;}
+  @media (min-width:760px){ .personalize-grid{grid-template-columns:repeat(3,1fr);} }
+  .style-card{
+    border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--line);
+    background:var(--card); box-shadow:var(--shadow-sm);
+  }
+  .style-card .img-box{aspect-ratio:4/3; overflow:hidden;}
+  .style-card .img-box img{width:100%; height:100%; object-fit:cover;}
+  .glyph-panel{
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(155deg, var(--gp-a), var(--gp-b));
+  }
+  .glyph-panel .glyph-mark{
+    font-family:'Fraunces', serif; font-weight:600; font-size:3.4rem; color:var(--gp-ink);
+    opacity:.9;
+  }
+  .gp-terracota{--gp-a:#e7cbb4; --gp-b:#c1552f; --gp-ink:#3a1c0e;}
+  .gp-petrol{--gp-a:#bcd6d2; --gp-b:#0e3d3e; --gp-ink:#e7f2f0;}
+  .gp-forest{--gp-a:#cdd9bd; --gp-b:#39552f; --gp-ink:#eef3e6;}
+  .style-bar{height:5px;}
+  .style-card.terracota .style-bar{background:var(--terracota);}
+  .style-card.petrol .style-bar{background:var(--petrol);}
+  .style-card.forest .style-bar{background:#39552f;}
+  .style-body{padding:16px 18px 20px;}
+  .style-body .style-name{font-family:'Fraunces', serif; font-weight:600; font-size:1rem; margin-bottom:4px;}
+  .style-body .style-desc{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+  .style-mock-item{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    margin-top:14px; padding-top:12px; border-top:1px dashed var(--line);
+    font-size:12px; color:var(--ink-faint);
+  }
+  .style-mock-item .price{font-family:'JetBrains Mono', monospace; font-weight:600;}
+  .style-card.terracota .price{color:var(--terracota-dark);}
+  .style-card.petrol .price{color:var(--petrol);}
+  .style-card.forest .price{color:#39552f;}
+  .personalize-note{font-size:12.5px; color:var(--ink-faint); margin-top:20px; text-align:center;}
+
+  /* ---------- Demo interactiva ---------- */
+  .demo-card{
+    display:grid; gap:0; border:1px solid var(--line); border-radius:var(--radius-lg);
+    overflow:hidden; background:var(--card); box-shadow:var(--shadow-sm); text-decoration:none;
+    transition:box-shadow .2s ease, transform .2s ease;
+  }
+  @media (min-width:760px){ .demo-card{grid-template-columns:1fr 1fr;} }
+  .demo-card:hover{box-shadow:var(--shadow-md); transform:translateY(-2px);}
+  .demo-card:focus-visible{outline:3px solid var(--terracota); outline-offset:3px;}
+  .demo-card .img-box{aspect-ratio:16/10; overflow:hidden; position:relative;}
+  @media (min-width:760px){ .demo-card .img-box{aspect-ratio:auto; height:100%;} }
+  .demo-card .img-box img{width:100%; height:100%; object-fit:cover;}
+  .demo-preview{background:#0e0c09; position:relative;}
+  .demo-preview iframe{width:130%; height:220%; border:0; pointer-events:none; position:absolute; top:-6%; left:-8%;}
+  .demo-card-body{padding:30px 28px; display:flex; flex-direction:column; justify-content:center; color:var(--ink);}
+  .demo-card-body .eyebrow{margin-bottom:10px;}
+  .demo-card-body h3{font-size:1.4rem; margin-bottom:10px;}
+  .demo-card-body p{font-size:14px; color:var(--ink-soft); line-height:1.6; margin-bottom:20px;}
+  .demo-card-cta{
+    display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:14px; color:var(--petrol);
+  }
+  .demo-card-cta svg{transition:transform .15s;}
+  .demo-card:hover .demo-card-cta svg{transform:translateX(3px);}
+
+  /* ---------- Plan ---------- */
+  .plan-card{
+    background:var(--petrol); color:var(--cream);
+    border-radius:var(--radius-lg); padding:40px 30px;
+    display:flex; flex-direction:column; gap:18px; align-items:flex-start;
+    max-width:640px;
+  }
+  @media (min-width:760px){ .plan-card{padding:48px 52px;} }
+  .plan-card .eyebrow{color:#e9c876;}
+  .plan-card .eyebrow::before{background:#e9c876;}
+  .plan-card h2{color:var(--cream); font-size:clamp(1.5rem,3vw,1.9rem);}
+  .plan-card p{color:rgba(247,242,230,.82); font-size:14.5px; line-height:1.65; max-width:52ch;}
+  .plan-ctas{display:flex; flex-wrap:wrap; gap:12px; margin-top:6px;}
+  .plan-card .btn-secondary{color:var(--cream); border-color:rgba(247,242,230,.5);}
+  .plan-card .btn-secondary:hover{background:rgba(247,242,230,.1);}
+  .plan-card .btn-primary{background:var(--cream); color:var(--petrol-dark); border-color:var(--cream);}
+  .plan-card .btn-primary:hover{background:#ece2c9;}
+
+  /* ---------- FAQ ---------- */
+  .faq-list{max-width:760px; border-top:1px solid var(--line);}
+  .faq-item{border-bottom:1px solid var(--line);}
+  .faq-item summary{
+    display:flex; justify-content:space-between; align-items:center; gap:16px;
+    padding:20px 4px; cursor:pointer; font-weight:600; font-size:15px;
+    list-style:none;
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary .icon{
+    flex:none; width:22px; height:22px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:15px; color:var(--petrol);
+    transition:transform .2s ease;
+  }
+  .faq-item[open] summary .icon{transform:rotate(45deg);}
+  .faq-item summary:focus-visible{outline:2px solid var(--terracota); outline-offset:3px; border-radius:6px;}
+  .faq-item p{margin:0 4px 20px; color:var(--ink-soft); font-size:14px; line-height:1.65; max-width:60ch;}
+
+  /* ---------- CTA final ---------- */
+  .final-cta{
+    text-align:center; background:var(--cream-2); border-radius:var(--radius-lg);
+    padding:56px 24px;
+  }
+  @media (min-width:760px){ .final-cta{padding:72px 40px;} }
+  .final-cta h2{font-size:clamp(1.8rem,4vw,2.5rem); max-width:20ch; margin-inline:auto;}
+  .final-cta .btn{margin-top:28px;}
+
+  /* ---------- Footer ---------- */
+  footer.site-footer{border-top:1px solid var(--line); padding-block:36px;}
+  .footer-row{display:flex; flex-direction:column; gap:14px; font-size:12.5px; color:var(--ink-faint);}
+  @media (min-width:640px){ .footer-row{flex-direction:row; justify-content:space-between; align-items:center;} }
+  .footer-row a{text-decoration:underline; text-underline-offset:2px; color:var(--ink-soft);}
+  .footer-row a:hover{color:var(--petrol);}
+  .footer-row a:focus-visible{outline:2px solid var(--terracota); outline-offset:2px;}
+
+  /* ---------- Subtle hover/press motion only — no scroll-triggered reveal. ----------
+     A scroll-reveal-on-view approach was tried and dropped: content could be left
+     permanently invisible if the observer missed a fast or programmatic scroll,
+     which is not an acceptable risk on a sales page. Everything is visible by default. */
+  @media (prefers-reduced-motion: reduce){
+    *{scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap nav-row">
+    <a href="#top" class="wordmark">menú<span class="dot">·</span>digital</a>
+    <nav class="nav-links" aria-label="Navegación principal">
+      <a href="#beneficios">Beneficios</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#personalizacion">Personalización</a>
+      <a href="#demo">Demo</a>
+      <a href="#preguntas">Preguntas</a>
+    </nav>
+    <a href="#" class="btn btn-primary nav-cta" data-wa-cta>Solicitar una demo</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">Menús digitales para restaurantes</span>
+        <h1>Tu menú. Tus clientes. Sin comisiones.</h1>
+        <p class="hero-desc">Convierte tu menú en una experiencia digital que recibe pedidos directamente por WhatsApp, refleja la identidad de tu restaurante y se actualiza en minutos.</p>
+        <div class="hero-ctas">
+          <a href="#" class="btn btn-primary" data-wa-cta>Solicitar una demo</a>
+          <a href="demo/" class="btn btn-secondary">Ver menú de ejemplo</a>
+        </div>
+        <div class="indicators">
+          <span class="indicator"><span class="dot"></span>Sin comisión por pedido</span>
+          <span class="indicator"><span class="dot"></span>Listo para QR</span>
+          <span class="indicator"><span class="dot"></span>Personalizado para tu marca</span>
+        </div>
+      </div>
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <iframe src="demo/" title="Vista previa del menú digital Marea" tabindex="-1" aria-hidden="true" loading="eager"></iframe>
+          </div>
+        </div>
+        <p class="phone-caption">Demo conceptual para restaurantes — así se ve un menú terminado, en vivo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEMA Y SOLUCIÓN -->
+  <section id="problema">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">El problema</span>
+        <h2>Los menús en PDF o fotos no venden por sí solos</h2>
+        <p>Un menú estático no recibe pedidos, es difícil de actualizar y no dice nada sobre la identidad de tu restaurante. Y las plataformas de delivery, aunque traen pedidos, cobran comisión por cada uno y se quedan con la relación directa con tu cliente.</p>
+      </div>
+      <div class="compare">
+        <div class="compare-col">
+          <span class="compare-label">Menú en PDF / imágenes / apps de delivery</span>
+          <h3>Lo de siempre</h3>
+          <ul>
+            <li>Cambiar un precio implica rediseñar y reenviar el archivo.</li>
+            <li>El cliente tiene que escribir su pedido a mano por WhatsApp.</li>
+            <li>Las apps de delivery cobran comisión por cada pedido.</li>
+            <li>No hay forma de mostrar la identidad visual del restaurante.</li>
+          </ul>
+        </div>
+        <div class="compare-col solution">
+          <span class="compare-label">Menú digital propio</span>
+          <h3>Con este servicio</h3>
+          <ul>
+            <li>Precios y disponibilidad se actualizan en minutos, sin rediseñar nada.</li>
+            <li>El pedido se arma solo y se envía directo por WhatsApp.</li>
+            <li>Pedido directo al restaurante — sin comisión por venta.</li>
+            <li>Diseño, colores y fotografía a la medida de tu marca.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section id="beneficios">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Beneficios</span>
+        <h2>Todo lo que necesita tu restaurante para vender más</h2>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit">
+          <span class="benefit-num">01</span>
+          <h3>Pedidos directos por WhatsApp</h3>
+          <p>El cliente arma su pedido en el menú y lo envía ya redactado, listo para confirmar.</p>
+        </div>
+        <div class="benefit">
+          <span class="benefit-num">02</span>
+          <h3>Menú disponible mediante QR</h3>
+          <p>Un código en cada mesa o en el escaparate lleva directo al menú, sin apps ni descargas.</p>
+        </div>
+        <div class="benefit">
+          <span class="benefit-num">03</span>
+          <h3>Diseño adaptado a tu marca</h3>
+          <p>Colores, tipografía y fotografía propios — no una plantilla genérica compartida.</p>
+        </div>
+        <div class="benefit">
+          <span class="benefit-num">04</span>
+          <h3>Recolección, domicilio o mesa</h3>
+          <p>El mismo menú se ajusta al tipo de pedido que maneja tu restaurante.</p>
+        </div>
+        <div class="benefit">
+          <span class="benefit-num">05</span>
+          <h3>Cambios rápidos de precio</h3>
+          <p>Actualiza platillos, precios o disponibilidad en minutos, sin depender de un diseñador.</p>
+        </div>
+        <div class="benefit">
+          <span class="benefit-num">06</span>
+          <h3>Optimizado para móvil</h3>
+          <p>Pensado para que la mayoría de tus clientes, que llegan desde el celular, pidan sin fricción.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Cómo funciona</span>
+        <h2>De tu menú actual a un menú digital, en tres pasos</h2>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <h3>Comparte tu menú e identidad</h3>
+          <p>Nos envías tus platillos, precios, fotografía (si tienes) y la identidad visual de tu restaurante.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <h3>Configuramos y personalizamos</h3>
+          <p>Armamos el menú digital con tu marca, categorías y estructura de pedido.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <h3>Recibes tu enlace y QR</h3>
+          <p>Listo para compartir en redes, imprimir en mesa o poner en tu escaparate — y empezar a vender.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONALIZACIÓN -->
+  <section id="personalizacion">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Personalización</span>
+        <h2>Un diseño propio para cada restaurante</h2>
+        <p>El menú se adapta a la identidad de tu negocio — no todos los restaurantes deben verse igual.</p>
+      </div>
+      <div class="personalize-grid">
+        <div class="style-card terracota">
+          <div class="img-box glyph-panel gp-terracota" aria-hidden="true"><span class="glyph-mark">F</span></div>
+          <div class="style-bar"></div>
+          <div class="style-body">
+            <div class="style-name">Estilo cálido</div>
+            <p class="style-desc">Acentos terracota, tipografía serif marcada — para cocina de brasa y sabor casero.</p>
+            <div class="style-mock-item"><span>Corte a la parrilla</span><span class="price">$420</span></div>
+          </div>
+        </div>
+        <div class="style-card petrol">
+          <div class="img-box glyph-panel gp-petrol" aria-hidden="true"><span class="glyph-mark">P</span></div>
+          <div class="style-bar"></div>
+          <div class="style-body">
+            <div class="style-name">Estilo costero</div>
+            <p class="style-desc">Azul petróleo y espacios amplios — para cocina de mar y sabores frescos.</p>
+            <div class="style-mock-item"><span>Pasta con camarones</span><span class="price">$265</span></div>
+          </div>
+        </div>
+        <div class="style-card forest">
+          <div class="img-box glyph-panel gp-forest" aria-hidden="true"><span class="glyph-mark">C</span></div>
+          <div class="style-bar"></div>
+          <div class="style-body">
+            <div class="style-name">Estilo contemporáneo</div>
+            <p class="style-desc">Verde profundo y líneas limpias — para conceptos casuales y de horno de leña.</p>
+            <div class="style-mock-item"><span>Pizza de horno</span><span class="price">$220</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="personalize-note">Demo conceptual para restaurantes — vistas previas de estilo, no aplicaciones completas.</p>
+    </div>
+  </section>
+
+  <!-- DEMO INTERACTIVA -->
+  <section id="demo">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Demo interactiva</span>
+        <h2>Conoce Marea, nuestro menú de ejemplo</h2>
+        <p>Así se ve un menú digital terminado: catálogo con fotografía, carrito de compra y pedido directo por WhatsApp. Explóralo como lo haría tu cliente.</p>
+      </div>
+      <a href="demo/" class="demo-card">
+        <div class="img-box demo-preview" aria-hidden="true"><iframe src="demo/" tabindex="-1" loading="lazy"></iframe></div>
+        <div class="demo-card-body">
+          <span class="eyebrow">Restaurante de ejemplo</span>
+          <h3>Marea — cocina de fuego y mar</h3>
+          <p>Un menú completo con categorías, carrito y checkout por WhatsApp ya funcionando — pruébalo tú mismo.</p>
+          <span class="demo-card-cta">Abrir menú de ejemplo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- PLAN -->
+  <section id="plan">
+    <div class="wrap">
+      <div class="plan-card">
+        <span class="eyebrow">Plan</span>
+        <h2>Cotización personalizada</h2>
+        <p>Cada restaurante es distinto — número de platillos, idiomas, fotografía e integración con tu marca. Cuéntanos sobre tu negocio y preparamos una propuesta a la medida.</p>
+        <div class="plan-ctas">
+          <a href="#" class="btn btn-primary" data-wa-cta>Solicitar cotización</a>
+          <a href="#" class="btn btn-secondary" data-email>Escribir por correo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="preguntas">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Lo que suelen preguntarnos</h2>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>¿Puedo cambiar precios?<span class="icon">+</span></summary>
+          <p>Sí. Los precios, platillos y disponibilidad se actualizan directamente en el menú, sin depender de imprimir o rediseñar nada.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Funciona con WhatsApp?<span class="icon">+</span></summary>
+          <p>Sí. El pedido se arma automáticamente con el detalle completo y se envía por WhatsApp al número de tu restaurante.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Necesito instalar una app?<span class="icon">+</span></summary>
+          <p>No. Tú y tus clientes lo usan directamente desde el navegador del teléfono, sin descargar nada.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Se adapta a la imagen de mi restaurante?<span class="icon">+</span></summary>
+          <p>Sí. Colores, tipografía y fotografía se ajustan a la identidad de tu marca — no es una plantilla genérica.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Puedo usar mi propio dominio?<span class="icon">+</span></summary>
+          <p>Sí, es posible conectar el menú a un dominio propio o a uno que te proporcionemos.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section id="cta-final">
+    <div class="wrap">
+      <div class="final-cta">
+        <h2>Haz que tu menú también venda.</h2>
+        <a href="#" class="btn btn-primary" data-wa-cta>Solicitar una demo</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <span>Menú digital para restaurantes — prototipo comercial.</span>
+    <span>Contacto: <a href="#" data-email>hola@tudominio.com</a> · <a href="demo/">Ver menú de ejemplo</a></span>
+  </div>
+</footer>
+
+<script>
+  // ---------------------------------------------------------------
+  // Configuración centralizada — edita aquí los datos reales del negocio.
+  // ---------------------------------------------------------------
+  window.SITE_CONFIG = {
+    whatsapp: "529981234567", // número de WhatsApp comercial, formato internacional sin "+" (número de ejemplo)
+    email: "hola@tudominio.com", // correo de contacto real
+    demoRequestMessage: "Hola, quiero una demo de un menú digital para mi restaurante."
+  };
+
+  (function(){
+    "use strict";
+    var cfg = window.SITE_CONFIG;
+    var waUrl = "https://wa.me/" + cfg.whatsapp + "?text=" + encodeURIComponent(cfg.demoRequestMessage);
+    document.querySelectorAll('[data-wa-cta]').forEach(function(a){
+      a.href = waUrl;
+      a.target = "_blank";
+      a.rel = "noopener";
+    });
+    document.querySelectorAll('[data-email]').forEach(function(el){
+      el.textContent = cfg.email;
+      el.href = "mailto:" + cfg.email;
+    });
+  })();
+</script>
+</body>
+</html>
