@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8"
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Menú digital para restaurantes — sin comisiones</title>
 <meta name="description" content="Convierte tu menú en una experiencia digital que recibe pedidos directamente por WhatsApp, refleja la identidad de tu restaurante y se actualiza en minutos.">
@@ -340,7 +340,7 @@
       <div class="phone-wrap">
         <div class="phone-frame">
           <div class="phone-screen">
-            <iframe src="demo/" title="Vista previa del menú digital Marea" tabindex="-1" aria-hidden="true" loading="eager"></iframe>
+                        <iframe data-src="demo/" title="Vista previa del menú digital Marea" tabindex="-1" aria-hidden="true" loading="lazy"></iframe>
           </div>
         </div>
         <p class="phone-caption">Demo conceptual para restaurantes — así se ve un menú terminado, en vivo.</p>
@@ -500,7 +500,7 @@
         <p>Así se ve un menú digital terminado: catálogo con fotografía, carrito de compra y pedido directo por WhatsApp. Explóralo como lo haría tu cliente.</p>
       </div>
       <a href="demo/" class="demo-card">
-        <div class="img-box demo-preview" aria-hidden="true"><iframe src="demo/" tabindex="-1" loading="lazy"></iframe></div>
+                <div class="img-box demo-preview" aria-hidden="true"><iframe src="demo/" title="Vista previa del menú digital Marea" tabindex="-1" loading="lazy"></iframe></div>
         <div class="demo-card-body">
           <span class="eyebrow">Restaurante de ejemplo</span>
           <h3>Marea — cocina de fuego y mar</h3>
@@ -601,7 +601,8 @@
       el.textContent = cfg.email;
       el.href = "mailto:" + cfg.email;
     });
-  })();
+      /* Difiere la carga del iframe pesado del hero (vista previa del menu) hasta que la propia landing termine de cargar, para no competir por ancho de banda/CPU con el contenido critico de la pagina. */ function loadDeferredFrames(){ document.querySelectorAll('iframe[data-src]').forEach(function(f){ f.src = f.getAttribute('data-src'); f.removeAttribute('data-src'); }); } if (document.readyState === 'complete') { loadDeferredFrames(); } else { window.addEventListener('load', loadDeferredFrames); }
+})();
 </script>
 </body>
 </html>
