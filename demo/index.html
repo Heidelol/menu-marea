@@ -20,7 +20,7 @@
     --cream-2:#efe4cf;
     --ink:#221f1b;
     --ink-soft:#55504a;
-    --ink-faint:#8a8377;
+    --ink-faint:#6e6659;
     --petrol:#0e3d3e;
     --petrol-dark:#092b2b;
     --petrol-tint:#e2ebe8;
@@ -197,7 +197,7 @@
     color:var(--terracota-dark); font-variant-numeric:tabular-nums;
   }
   .feat-add{
-    min-width:var(--tap); min-height:32px;
+    min-width:var(--tap); min-height:var(--tap);
     display:flex; align-items:center; justify-content:center;
   }
   .feat-add-inner{
@@ -214,7 +214,10 @@
   .qty-controls{ display:flex; align-items:center; gap:7px; }
   .qty-controls button{
     background:none; border:none; color:inherit; font-size:15px; font-weight:700;
-    cursor:pointer; line-height:1; padding:4px; min-width:20px; min-height:20px;
+    cursor:pointer; line-height:1; padding:4px; min-width:20px; min-height:20px; position:relative;
+  }
+  .qty-controls button::before{
+    content:""; position:absolute; inset:-10px -3px;
   }
 
   /* ---------- Secciones y filas del menú ---------- */
@@ -259,7 +262,7 @@
     font-family:'JetBrains Mono', monospace; font-weight:600; font-size:13.5px;
     color:var(--ink); white-space:nowrap; font-variant-numeric:tabular-nums;
   }
-  .item-add{ display:flex; align-items:center; justify-content:center; min-width:var(--tap); min-height:32px; }
+  .item-add{ display:flex; align-items:center; justify-content:center; min-width:var(--tap); min-height:var(--tap); }
   .item-add-inner{
     width:32px; height:32px; border-radius:50%;
     background:var(--card); border:1px solid var(--petrol); color:var(--petrol-dark);
@@ -322,7 +325,7 @@
   .sheet.show{ transform:translateY(0); }
   .sheet-close{
     position:absolute; top:12px; right:12px; z-index:2;
-    width:36px; height:36px; border-radius:50%;
+    width:var(--tap); height:var(--tap); border-radius:50%;
     background:rgba(255,255,255,.94); border:1px solid var(--line);
     color:var(--ink); font-size:16px;
     display:flex; align-items:center; justify-content:center;
@@ -386,11 +389,11 @@
 
   .wa-btn{
     display:flex; align-items:center; justify-content:center; gap:8px;
-    background:#1f9e57; color:#fff; border:none; border-radius:10px;
+    background:#188047; color:#fff; border:none; border-radius:10px;
     font-weight:700; font-size:14.5px; padding:14px; cursor:pointer; margin-top:2px;
     min-height:var(--tap);
   }
-  .wa-btn:hover{ background:#188047; }
+  .wa-btn:hover{ background:#146c3c; }
   .copy-btn{
     background:none; border:1px solid var(--line); color:var(--ink-soft);
     border-radius:9px; font-size:12.5px; padding:10px; cursor:pointer; min-height:var(--tap);
@@ -416,7 +419,7 @@
     background:#fff;
   }
   .stepper button{
-    width:var(--tap); height:32px; border-radius:7px; border:none;
+    width:var(--tap); height:var(--tap); border-radius:7px; border:none;
     background:var(--cream-2); color:var(--ink); font-size:16px; font-weight:700;
     cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1;
   }
