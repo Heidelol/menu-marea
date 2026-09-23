@@ -122,11 +122,8 @@
   .status-chip.is-closed .dot{ background:var(--terracota); }
 
   /* Barra de información compacta */
-  .info-bar{
-    display:flex; flex-wrap:wrap; row-gap:2px;
-    background:var(--cream-2); border-bottom:1px solid var(--line);
-    padding:6px 10px;
-  }
+  .info-bar{background:var(--cream-2); border-bottom:1px solid var(--line);}
+  .info-bar-inner{display:flex; flex-wrap:wrap; row-gap:2px; max-width:760px; margin:0 auto; padding:6px 10px;}
   .info-item{
     flex:none; display:flex; align-items:center; gap:6px;
     font-size:11px; color:var(--ink-soft); font-weight:500;
@@ -447,7 +444,11 @@
 
   /* Ancho de escritorio: misma columna que la landing, un poco más de aire */
   @media (min-width:860px){
-    .wrap, .head-bar, .cats-scroll, .featured-head, .featured-scroll{ max-width:760px; }
+    .wrap, .head-bar, .cats-scroll, .featured-head, .featured-scroll{ max-width:760px; margin-inline:auto; }
+  }
+  @media (min-width:1024px){
+    .featured-scroll{ display:grid; grid-template-columns:repeat(4, 1fr); gap:14px; overflow-x:visible; scroll-snap-type:none; }
+    .feat-card{ width:100%; max-width:none; }
   }
 </style>
 </head>
@@ -473,9 +474,11 @@
     </div>
   </div>
   <div class="info-bar">
+    <div class="info-bar-inner">
     <span class="info-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>13:00–23:00</span>
     <span class="info-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-6.4 7-11.5A7 7 0 0 0 5 9.5C5 14.6 12 21 12 21z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>Recolección o domicilio</span>
     <span class="info-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Pedido directo, sin comisión de apps</span>
+    </div>
   </div>
 </header>
 
